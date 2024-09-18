@@ -7,62 +7,75 @@ public class Soundex
     {
         if (string.IsNullOrEmpty(name))
         {
-            return string.Empty;
+            return "0000";
         }
 
+        // Initialize the Soundex code with the first character
         StringBuilder soundex = new StringBuilder();
         soundex.Append(char.ToUpper(name[0]));
+
         char prevCode = GetSoundexCode(name[0]);
 
-        for (int i = 1; i < name.Length && soundex.Length < 4; i++)
+        // Append Soundex codes from the rest of the characters
+        AppendSoundexCodes(name, soundex, ref prevCode);
+
+        // Pad the Soundex code to ensure it is exactly 4 characters long
+        PadSoundexString(soundex);
+
+        return soundex.ToString();
+    }
+
+    private static void AppendSoundexCodes(string name, StringBuilder soundex, ref char prevCode)
+    {
+        for (int index=1; IsValidIndex(index,name,soundex); index++)
         {
-            char code = GetSoundexCode(name[i]);
-            if (code != '0' && code != prevCode)
+            char code = GetSoundexCode(name[index]);
+            if (ShouldAppendCode(code, prevCode))
             {
                 soundex.Append(code);
                 prevCode = code;
             }
         }
+    }
+   
+    private static bool IsValidIndex(int currentIndex, string name, StringBuilder soundex)
+    {
+            return currentIndex < name.Length && soundex.Length < 4;
+    }
+    
+    private static bool ShouldAppendCode(char code, char prevCode)
+    {
+        return code != '0' && code != prevCode;
+    }
 
+    private static void PadSoundexString(StringBuilder soundex)
+    {
         while (soundex.Length < 4)
         {
             soundex.Append('0');
         }
-
-        return soundex.ToString();
     }
-
+    
+    private static readonly (string Characters, char Code)[] SoundexGroups = 
+    {
+        ("BFPV", '1'),
+        ("CGJKQSXZ", '2'),
+        ("DT", '3'),
+        ("L", '4'),
+        ("MN", '5'),
+        ("R", '6')
+    };
+    
     private static char GetSoundexCode(char c)
     {
         c = char.ToUpper(c);
-        switch (c)
+        foreach (var group in SoundexGroups)
         {
-            case 'B':
-            case 'F':
-            case 'P':
-            case 'V':
-                return '1';
-            case 'C':
-            case 'G':
-            case 'J':
-            case 'K':
-            case 'Q':
-            case 'S':
-            case 'X':
-            case 'Z':
-                return '2';
-            case 'D':
-            case 'T':
-                return '3';
-            case 'L':
-                return '4';
-            case 'M':
-            case 'N':
-                return '5';
-            case 'R':
-                return '6';
-            default:
-                return '0'; // For A, E, I, O, U, H, W, Y
+            if (group.Characters.Contains(c))
+            {
+                return group.Code;
+            }
         }
+        return '0';
     }
 }

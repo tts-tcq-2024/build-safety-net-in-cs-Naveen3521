@@ -1,0 +1,42 @@
+﻿;Test Case For Soundex Algorithm;;;
+SL NO;TestCase Name;TestCase Desciption;Input ;Expected Output
+1;GenerateSoundex_HandlesEmptyString_NullString_WhitespaceString; when input is not given or spaces is given as input;"1.
+2.""   """;"1,""0000""
+2."" 000"""
+2;GenerateSoundex_HandlesCharacterLessThanFour; when less than four characters is given as input;"1.""A""
+2.""BF""
+3.""CPG""";"1.A000
+2.B000
+3.C120"
+3;GenerateSoundex_HandlesCaseSensitiveCharacters;when string with different cases is given as input;"1.Robert
+2.robeRT";"1.R163
+2.R163"
+4;GenerateSoundex_HandlesOnlyNonAlphabeticCharacters;non alphabetic characters is given as input;"1.1234
+2.#$% ^&";"1.1000
+2.#000"
+5;GenerateSoundex_HandlesNameWithSpecialCharacters;When Special Characters as given as input;"1.J@hn
+2.Alex1nderSmith";"1.J500
+2.A425"
+6;GenerateSoundex_HandlesNamesWithRepeatedCharacters;when 2 consecutive characters are repeated is given as input;"1.Aaaa
+2.Danna";"1.A000
+2.D500"
+7;GenerateSoundex_HandlesNamesWithAllVowels;When string consists of all vowel charaters;"1.AEIOU
+2.I
+3.EAOUI";"1.A000
+2.I000
+3.E000"
+8;GGenerateSoundex_HandlesNamesWithConsonantAndVowels;mix of vowels and consonents are given as input ;"1.Oli
+2.Uri
+3.Oce
+4.ABACAB";"1.O400
+2.U600
+3.O200
+4.A121"
+9;GenerateSoundex_HandlesSpacesBetweenString;When spaces when given in the start ,middle or end of string;"1."" Samuel""
+2.""Samuel ""
+3.""Sam uel""";"1."" 254""
+2.S540
+3.S540"
+10;GenerateSoundex_HandlesCorrectEntry;when correct string is given as input;"1.Robert
+2.alex";"1.R163
+2.A420"
